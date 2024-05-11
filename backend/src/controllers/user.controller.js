@@ -25,22 +25,33 @@ const registerUser = asyncHandler(async (req, res) => {
     role,
   });
 
+  if(!user){
+    throw new ApiError(404,"User Not Created")
+  }
+
   const createduser = await User.findById(user._id).select("-password");
 
   if (!createduser) {
     throw new ApiError(404, "there error while registering user");
   }
 
-  
+  sendToken(createduser,200,res,"User Registered Successfully")
 
-  return res
-    .status(201)
-    .json(new ApiResponse(200, createduser, "User registered successfully"));
+  
 
 
 });
 
-const loginUser = asyncHandler(async (req, res) => {});
+const loginUser = asyncHandler(async (req, res) => {
+  const {email,password,role} = req.body
+
+  if(!email || !password || !role){
+    throw new ApiError(401,"field shouldnt be empty")
+  }
+
+  const checkUser = ""
+
+});
 
 const logoutUser = asyncHandler(async (req, res) => {});
 
