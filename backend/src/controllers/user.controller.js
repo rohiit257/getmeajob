@@ -3,7 +3,6 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/apiError.js";
 import { sendToken } from "../utils/jwttoken.js";
 import { ApiResponse } from "../utils/apiResponse.js";
-import { compare } from "bcrypt";
 
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, phonenumber, password, role } = req.body;
