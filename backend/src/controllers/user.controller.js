@@ -3,6 +3,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/apiError.js";
 import { sendToken } from "../utils/jwttoken.js";
 import { ApiResponse } from "../utils/apiResponse.js";
+import { compare } from "bcrypt";
 
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, phonenumber, password, role } = req.body;
@@ -49,11 +50,33 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new ApiError(401,"field shouldnt be empty")
   }
 
-  const checkUser = ""
+  const user = await User.findOne({email}).select("+password")
+  if(!user){
+    throw new ApiError(404,"invalid email")
+  }
+  const isPasswordCorrect = await user.comparePassword(password)
+  if(!isPasswordCorrect){
+    throw new ApiError(404,"incorrect Password")
+  }
+  if(user.role !== role){
+    throw new ApiError(404,"Invalid User Role")
+  }
+
+  const loggedInUser = await User.findById(user._id).select("-password")
+
+  sendToken(loggedInUser,200,res,"User LoggedIn succesfully")
+
 
 });
 
-const logoutUser = asyncHandler(async (req, res) => {});
+const logoutUser = asyncHandler(async (_, res) => {
+  res.status(201)
+  .cookie("token","",{
+    httpOnly:true,
+    expires:new Date(Date.now())
+  })
+  .json(new ApiResponse(200,"user logged out successfully"))
+});
 
 const getUser = asyncHandler(async (req, res) => {});
 
