@@ -1,19 +1,20 @@
 import { User } from "../models/user.models.js";
-import mongoose from "mongoose";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/apiError.js";
+import { sendToken } from "../utils/jwttoken.js";
+import { ApiResponse } from "../utils/apiResponse.js";
 
-const registerUser = asyncHandler(async(req,res)=> {
-    const {name,email,phonenumber,password,role} = req.body
+const registerUser = asyncHandler(async (req, res) => {
+    const { name, email, phonenumber, password, role } = req.body;
 
-    if(!name || !email || !phonenumber || !password ||!role){
-        throw new ApiError(400,"All Field Are Required")
+    if (!name || !email || !phonenumber || !password || !role) {
+        throw new ApiError(400, "All fields are required");
     }
 
-    const existedUser = await User.findOne({email})
+    const existingUser = await User.findOne({ email });
 
-    if(existedUser){
-        throw new ApiError(401,"user already exits")
+    if (existingUser) {
+        throw new ApiError(401, "User already exists");
     }
 
     const user = await User.create({
@@ -22,18 +23,20 @@ const registerUser = asyncHandler(async(req,res)=> {
         phonenumber,
         password,
         role
-    })
+    });
 
-    if(!user){
-        throw new ApiError(404,"user not created")
+   
+    const createduser = await User.findById(user._id).select("-password")
+
+    if(!createduser){
+        throw new ApiError(404,"there error while registering user")
     }
 
-    sendToken(user, 201, res, "User Registered!");
-
-
-})
-
+    return res.status(201).json(
+        new ApiResponse(200, createduser, "User registered successfully")
+    );
+});
 
 export {
     registerUser
-}
+};
