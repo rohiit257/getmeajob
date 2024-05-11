@@ -1,0 +1,1 @@
+export const DB_NAME = "GET_ME_A_JOB"
