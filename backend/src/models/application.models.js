@@ -20,11 +20,11 @@ const applicationSchema = new Schema({
     resume:{
         public_id:{
             type:String,
-            required:true
+            required:false
         },
         url:{
             type:String,
-            required:true
+            required:false
         }
     },
     applicantId:{
