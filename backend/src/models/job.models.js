@@ -1,6 +1,5 @@
-import mongoose from "mongoose";
+import mongoose,{Schema} from "mongoose";
 
-const {Schema} = mongoose
 
 const jobSchema = new Schema({
     title:{
@@ -36,7 +35,7 @@ const jobSchema = new Schema({
         type:String,
         required:true
     },
-    expired:{
+    isExpired:{
         type:Boolean,
         default:false
     },
