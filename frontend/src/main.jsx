@@ -1,8 +1,6 @@
-import React from 'react'
-import  { createContext, useState } from "react";
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
+import React, { createContext, useState } from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
 
 export const Context = createContext({
   isAuthorized: false,
@@ -26,9 +24,8 @@ const AppWrapper = () => {
   );
 };
 
-
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AppWrapper/>
-  </React.StrictMode>,
-)
+    <AppWrapper />
+  </React.StrictMode>
+);

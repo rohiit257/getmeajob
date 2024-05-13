@@ -6,7 +6,7 @@ const app = express()
 
 app.use(
     cors({
-      origin: [process.env.CORS],
+      origin: 'http://localhost:5173',
       method: ["GET", "POST", "DELETE", "PUT"],
       credentials: true,
     })
