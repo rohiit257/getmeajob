@@ -84,6 +84,62 @@ const postApplication = asyncHandler(async(req,res)=>{
 
 })
 
+const employerGetAllApplications = asyncHandler(async(req,res)=>{
+    const {role} = req.user 
+    if(role === "JobSeeker"){
+        throw new ApiError(400,"you dont have access")
+    }
 
+    const {_id} = req.user
+    console.log({_id});
+    const Eapplication = await Application.find({"employerId.user":_id})
+    console.log(Eapplication);
+    if(!Eapplication){
+        throw new ApiError(404,"application not found")
+    }
 
-export {postApplication}
+    return res.status(201).json(
+        new ApiResponse(200,Eapplication)
+    )
+})
+
+const jobseekerGetAllApplications = asyncHandler(async(req,res)=>{
+    const {role} = req.user 
+    if(role === "Employer"){
+        throw new ApiError(400,"you dont have access")
+    }
+
+    const {_id} = req.user
+    console.log({_id});
+    const Eapplication = await Application.find({"applicantId.user":_id})
+    console.log(Eapplication);
+    if(!Eapplication){
+        throw new ApiError(404,"application not found")
+    }
+
+    return res.status(201).json(
+        new ApiResponse(200,Eapplication)
+    )
+})
+
+const jobseekerDeleteApplication = asyncHandler(async(req,res)=>{
+    const {role} = req.user
+    if(role === "Employer"){
+        throw new ApiError(404,"You Dont Have Access")
+    }
+
+    const {id} = req.params
+    const application = await findById(id)
+    if(!application){
+        throw new ApiError(404,"application not found")
+    }
+
+    await application.deleteOne()
+    return res.status(201).json(
+        new ApiResponse(200,"Application Deleted Successfully")
+    )
+})
+export {postApplication,
+    employerGetAllApplications,jobseekerGetAllApplications,
+    jobseekerDeleteApplication
+}

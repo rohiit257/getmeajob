@@ -77,6 +77,11 @@ const logoutUser = asyncHandler(async (_, res) => {
   .json(new ApiResponse(200,"user logged out successfully"))
 });
 
-const getUser = asyncHandler(async (req, res) => {});
+const getUser = asyncHandler(async (req, res) => {
+  const user = req.user
+  return res.status(201).json(
+    new ApiResponse(200,user)
+  )
+});
 
-export { registerUser, loginUser, logoutUser };
+export { registerUser, loginUser, logoutUser,getUser };
