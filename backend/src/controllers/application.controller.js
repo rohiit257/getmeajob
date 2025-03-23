@@ -122,23 +122,26 @@ const jobseekerGetAllApplications = asyncHandler(async(req,res)=>{
     )
 })
 
-const jobseekerDeleteApplication = asyncHandler(async(req,res)=>{
-    const {role} = req.user
-    if(role === "Employer"){
-        throw new ApiError(404,"You Dont Have Access")
+const jobseekerDeleteApplication = asyncHandler(async (req, res) => {
+    const { role } = req.user;
+    if (role === "Employer") {
+        throw new ApiError(403, "You don't have access"); // 403 is a better status code for forbidden access
     }
 
-    const {id} = req.params
-    const application = await findById(id)
-    if(!application){
-        throw new ApiError(404,"application not found")
+    const { id } = req.params;
+
+    // Ensure `Application` is your Mongoose model
+    const application = await Application.findByIdAndDelete(id);
+
+    if (!application) {
+        throw new ApiError(404, "Application not found");
     }
 
-    await application.deleteOne()
-    return res.status(201).json(
-        new ApiResponse(200,"Application Deleted Successfully")
-    )
-})
+    return res.status(200).json(
+        new ApiResponse(200, "Application Deleted Successfully", null)
+    );
+});
+
 export {postApplication,
     employerGetAllApplications,jobseekerGetAllApplications,
     jobseekerDeleteApplication
