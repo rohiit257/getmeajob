@@ -41,7 +41,7 @@ export function Navbar() {
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
           <Briefcase className="h-8 w-8 text-[#DE7356]" />
-          <span className="text-2xl font-bold text-gray-900">JobPortal</span>
+          <span className="text-2xl font-bold text-gray-900">GetMeAJob</span>
         </Link>
 
         <nav className="hidden md:flex items-center space-x-6">
